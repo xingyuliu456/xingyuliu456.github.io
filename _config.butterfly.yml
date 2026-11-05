@@ -1,0 +1,75 @@
+# Butterfly Theme Configuration
+# Docs: https://butterfly.js.org/
+
+# 导航栏设置 (简约大气，支持毛玻璃磨砂效果)
+nav:
+  logo: false
+  display_title: true
+  fixed: true
+
+# 菜单配置
+menu:
+  首页: / || fas fa-home
+  归档: /archives/ || fas fa-archive
+  标签: /tags/ || fas fa-tags
+  分类: /categories/ || fas fa-folder-open
+  关于: /about/ || fas fa-user
+
+# 社交链接
+social:
+  fab fa-github: https://github.com/xingyuliu456 || GitHub
+
+# 网站头像与作者卡片
+avatar:
+  img: https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=500&q=80
+  effect: false
+
+# 顶图 Banner (高分辨率纯净风景图片)
+index_img: https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2560&q=85
+archive_img: https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=2560&q=85
+tag_img: https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2560&q=85
+category_img: https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2560&q=85
+default_top_img: https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2560&q=85
+
+# 全局背景：雅致风景图配合浅色半透明遮罩，保证文字阅读对比度与简约质感
+background: "linear-gradient(rgba(247, 249, 252, 0.92), rgba(240, 244, 248, 0.92)), url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=2560&q=80') center/cover fixed"
+
+# 暗色模式 (Dark Mode)
+darkmode:
+  enable: true
+  button: true
+  autoChangeMode: 1
+
+# 阅读进度条
+reading_progress:
+  enable: true
+  color: "#49b1f5"
+  height: "3px"
+
+# 代码块配置 (简约现代风格，开启一键复制)
+code_blocks:
+  copy: true
+  style: mac
+  shrink: false
+  fullpage: true
+
+# 字体与排版
+font:
+  global-font-size: 16px
+  code-font-size: 14px
+
+# 页面打字机副标题效果
+subtitle:
+  enable: true
+  loop: true
+  source: false
+  sub:
+    - "Stay hungry, stay foolish."
+    - "Code, think, explore and create."
+
+# 页脚配置
+footer:
+  owner:
+    enable: true
+    since: 2026
+  custom_text: '<span>Driven by Curiosity & Passion</span>'
