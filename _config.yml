@@ -13,8 +13,8 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## GitHub Pages 部署路径配置：
-url: https://xingyuliu456.github.io/Blog
-root: /Blog/
+url: https://xingyuliu456.github.io
+root: /
 permalink: posts/:hash/
 permalink_defaults:
 pretty_urls:
