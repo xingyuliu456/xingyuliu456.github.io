@@ -1,0 +1,31 @@
+/* ========================================================
+   自定义全局样式优化 (Custom Styles)
+   ======================================================== */
+
+/* 1. 消除页脚蓝色突兀感：实现自然透明融合，在深浅色模式下完美呼应 */
+#footer {
+  background: transparent !important;
+  color: var(--font-color) !important;
+}
+
+#footer::before {
+  display: none !important;
+}
+
+#footer #footer-wrap a,
+#footer #footer-wrap span {
+  color: var(--font-color) !important;
+  opacity: 0.85;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+#footer #footer-wrap a:hover {
+  opacity: 1;
+  color: #49b1f5 !important;
+}
+
+/* 2. 侧边栏个人卡片关注按钮适配 */
+#card-info-btn {
+  background-color: #3b82f6 !important;
+  border-radius: 8px !important;
+}

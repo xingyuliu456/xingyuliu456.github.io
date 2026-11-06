@@ -2,7 +2,7 @@
 # Docs: https://butterfly.js.org/
 
 # 网站图标 (Favicon)
-favicon: /img/favicon.ico
+favicon: /img/site_icon.png
 
 # 导航栏设置 (简约大气，支持毛玻璃磨砂效果)
 nav:
@@ -77,3 +77,18 @@ footer:
     enable: true
     since: 2026
   custom_text: '<span>Driven by Curiosity & Passion</span>'
+
+# 侧边栏作者卡片优化
+aside:
+  card_author:
+    enable: true
+    button:
+      enable: true
+      icon: fab fa-github
+      text: Follow Me
+      link: https://github.com/xingyuliu456
+
+# 自定义样式注入 (消除页脚突兀蓝色，优化排版细节)
+inject:
+  head:
+    - <link rel="stylesheet" href="/css/custom.css">
