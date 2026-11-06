@@ -1,12 +1,25 @@
-// source/js/meteor.js - 动态星空流星雨特效
+// source/js/meteor.js - 仅在首页生效的高清精美拟真流星雨引擎
 (function () {
-  function initMeteorShower() {
-    const header = document.getElementById('page-header');
-    if (!header) return;
+  let animationId = null;
 
-    // 避免重复挂载
+  function cleanup() {
+    if (animationId) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    }
     const oldCanvas = document.getElementById('meteor-canvas');
     if (oldCanvas) oldCanvas.remove();
+  }
+
+  function initMeteorShower() {
+    cleanup();
+
+    // 严格判断：仅在主页（拥有 full_page 且有 site-info）时生效，所有 post/文章页绝对不运行
+    const header = document.querySelector('#page-header.full_page');
+    const siteInfo = document.getElementById('site-info');
+    if (!header || !siteInfo) {
+      return;
+    }
 
     const canvas = document.createElement('canvas');
     canvas.id = 'meteor-canvas';
@@ -25,58 +38,105 @@
     resize();
     window.addEventListener('resize', resize);
 
-    // 流星参数池
-    const meteors = [];
-    const maxMeteors = 6; // 维持 5-7 条优雅逼真的流星，避免杂乱
-
+    // 拟真单颗流星对象
     class Meteor {
       constructor() {
-        this.reset(true);
+        this.alive = false;
+        this.wait = Math.floor(Math.random() * 80 + 20); // 初始等待帧数
       }
 
-      reset(initial = false) {
-        // 从左上角上方随机刷出
-        this.x = Math.random() * (width + 300) - 200;
-        this.y = Math.random() * -height * 0.4 - 30;
-        this.length = Math.random() * 110 + 70; // 优雅修长的尾光
-        this.speed = Math.random() * 7 + 10;    // 真实流星的划过速度
-        this.angle = Math.PI / 4 + (Math.random() * 0.12 - 0.06); // 约 45 度斜划
-        this.size = Math.random() * 1.6 + 1.2;
-        this.alpha = Math.random() * 0.5 + 0.45;
-        // 错开出现的间隔，实现自然轮流划过的夜空效果
-        this.delay = initial ? Math.floor(Math.random() * 120) : Math.floor(Math.random() * 160 + 30);
+      spawn() {
+        // 出生点：屏幕偏中上方天空中（x 坐标偏左中，y 坐标在顶部 5% ~ 35% 夜空中）
+        this.startX = Math.random() * (width * 0.9) - width * 0.1;
+        this.startY = Math.random() * (height * 0.35);
+        this.x = this.startX;
+        this.y = this.startY;
+
+        // 流星角度：倾斜 36° ~ 42° 自然弧度
+        this.angle = (38 + Math.random() * 4) * (Math.PI / 180);
+        // 流星行进总距离：在天空中划过 280px ~ 460px 后完全燃尽，绝不侵入下方山体森林
+        this.totalDist = Math.random() * 180 + 280;
+        this.dist = 0;
+        // 速度：划破夜空的拟真高速感
+        this.speed = Math.random() * 8 + 14;
+
+        // 彗尾长度与流星粗细
+        this.tailLength = Math.random() * 80 + 100;
+        this.size = Math.random() * 1.4 + 1.2;
+
+        this.alive = true;
       }
 
       update() {
-        if (this.delay > 0) {
-          this.delay--;
+        if (!this.alive) {
+          if (this.wait > 0) {
+            this.wait--;
+          } else {
+            this.spawn();
+          }
           return;
         }
 
-        this.x += this.speed * Math.cos(this.angle);
-        this.y += this.speed * Math.sin(this.angle);
+        // 推进位置
+        const moveStep = this.speed;
+        this.x += moveStep * Math.cos(this.angle);
+        this.y += moveStep * Math.sin(this.angle);
+        this.dist += moveStep;
 
-        // 超出视窗则重置
-        if (this.x > width + 100 || this.y > height + 100) {
-          this.reset(false);
+        // 如果达到燃尽距离，或接近山脊高度（超过顶部 65%），则燃尽湮灭
+        if (this.dist >= this.totalDist || this.y > height * 0.62 || this.x > width + 50) {
+          this.alive = false;
+          // 燃尽后等待随机帧数（约 2 ~ 4 秒）再触发下一次流星，避免杂乱
+          this.wait = Math.floor(Math.random() * 140 + 60);
         }
       }
 
       draw() {
-        if (this.delay > 0) return;
+        if (!this.alive) return;
+
+        // 计算当前生命周期进度 (0 ~ 1)
+        const progress = Math.min(this.dist / this.totalDist, 1);
+
+        // 亮度模拟：进入大气层快速增亮 (0->0.2)，空中极盛 (0.2->0.6)，燃尽平滑消隐 (0.6->1.0)
+        let alpha = 0;
+        if (progress < 0.2) {
+          alpha = progress / 0.2;
+        } else if (progress <= 0.6) {
+          alpha = 1.0;
+        } else {
+          alpha = (1.0 - progress) / 0.4;
+        }
+
+        if (alpha <= 0.01) return;
 
         ctx.save();
-        const tailX = this.x - this.length * Math.cos(this.angle);
-        const tailY = this.y - this.length * Math.sin(this.angle);
 
-        // 流星发光渐变：亮金白星核 -> 极光青蓝尾光 -> 渐隐透明
-        const gradient = ctx.createLinearGradient(this.x, this.y, tailX, tailY);
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${this.alpha})`);
-        gradient.addColorStop(0.15, `rgba(56, 189, 248, ${this.alpha * 0.85})`);
-        gradient.addColorStop(0.65, `rgba(99, 102, 241, ${this.alpha * 0.35})`);
-        gradient.addColorStop(1, 'rgba(15, 23, 42, 0)');
+        const tailX = this.x - this.tailLength * Math.cos(this.angle);
+        const tailY = this.y - this.tailLength * Math.sin(this.angle);
 
-        ctx.strokeStyle = gradient;
+        // 1. 外层柔和辉光层 (Atmospheric Glow)
+        const outerGlow = ctx.createLinearGradient(this.x, this.y, tailX, tailY);
+        outerGlow.addColorStop(0, `rgba(255, 255, 255, ${alpha * 0.9})`);
+        outerGlow.addColorStop(0.2, `rgba(56, 189, 248, ${alpha * 0.4})`);
+        outerGlow.addColorStop(0.7, `rgba(99, 102, 241, ${alpha * 0.15})`);
+        outerGlow.addColorStop(1, 'rgba(15, 23, 42, 0)');
+
+        ctx.strokeStyle = outerGlow;
+        ctx.lineWidth = this.size * 3.5;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(tailX, tailY);
+        ctx.stroke();
+
+        // 2. 内层高光彗核尾迹 (Bright Core Trail)
+        const innerCore = ctx.createLinearGradient(this.x, this.y, tailX, tailY);
+        innerCore.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
+        innerCore.addColorStop(0.1, `rgba(224, 242, 254, ${alpha * 0.95})`);
+        innerCore.addColorStop(0.4, `rgba(56, 189, 248, ${alpha * 0.6})`);
+        innerCore.addColorStop(1, 'rgba(56, 189, 248, 0)');
+
+        ctx.strokeStyle = innerCore;
         ctx.lineWidth = this.size;
         ctx.lineCap = 'round';
         ctx.beginPath();
@@ -84,21 +144,21 @@
         ctx.lineTo(tailX, tailY);
         ctx.stroke();
 
-        // 头部微小高亮光晕
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+        // 3. 头部星核微光晕 (Head Star Core)
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size * 1.3, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y, this.size * 1.4, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.restore();
       }
     }
 
-    for (let i = 0; i < maxMeteors; i++) {
-      meteors.push(new Meteor());
-    }
+    // 维持 3 颗流星交替巡航（错开间隔，每次划过 1 颗，偶尔双星交映）
+    const meteors = [new Meteor(), new Meteor(), new Meteor()];
+    meteors[1].wait = 60;
+    meteors[2].wait = 130;
 
-    let animationId;
     function animate() {
       ctx.clearRect(0, 0, width, height);
       for (let i = 0; i < meteors.length; i++) {
@@ -109,14 +169,15 @@
     }
     animate();
 
-    // 页面 PJAX 切换时清理计时器
-    document.addEventListener('pjax:send', function cleanup() {
-      cancelAnimationFrame(animationId);
+    // 页面 PJAX 跳转离开时彻底停止清理
+    document.addEventListener('pjax:send', function onPjaxSend() {
+      cleanup();
       window.removeEventListener('resize', resize);
-      document.removeEventListener('pjax:send', cleanup);
+      document.removeEventListener('pjax:send', onPjaxSend);
     });
   }
 
+  // 页面加载或 PJAX 完成时挂载
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initMeteorShower);
   } else {
