@@ -56,7 +56,7 @@ code_blocks:
   copy: true
   style: mac
   shrink: false
-  fullpage: true
+  fullpage: false
 
 # 字体与排版
 font:

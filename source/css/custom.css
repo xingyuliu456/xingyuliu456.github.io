@@ -155,3 +155,63 @@
 .card-recent-post {
   display: none !important;
 }
+
+/* 8. 修复浅色模式下代码块文字过浅问题，提升代码对比度与可读性 */
+:root:not([data-theme="dark"]) {
+  --hl-color: #1f2328 !important;
+  --hl-bg: #f6f8fa !important;
+  --hltools-bg: #eaeef2 !important;
+  --hltools-color: #334155 !important;
+  --hlnumber-bg: #f6f8fa !important;
+  --hlnumber-color: #6e7781 !important;
+}
+
+:root:not([data-theme="dark"]) figure.highlight pre,
+:root:not([data-theme="dark"]) figure.highlight .code,
+:root:not([data-theme="dark"]) figure.highlight .line {
+  color: #1f2328 !important;
+}
+
+:root:not([data-theme="dark"]) figure.highlight .gutter .line {
+  color: #6e7781 !important;
+}
+
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .comment {
+  color: #57606a !important;
+  font-style: italic;
+}
+
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .keyword,
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .tag {
+  color: #cf222e !important;
+  font-weight: 600;
+}
+
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .built_in,
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .type {
+  color: #0550ae !important;
+}
+
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .number,
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .literal,
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .constant,
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .params {
+  color: #953800 !important;
+}
+
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .string,
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .value,
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .special {
+  color: #116329 !important;
+}
+
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .function,
+:root:not([data-theme="dark"]) #article-container figure.highlight pre .title {
+  color: #6639ba !important;
+  font-weight: 600;
+}
+
+/* 彻底隐藏代码块全屏按钮（避免 backdrop-filter 导致 fixed 全屏白屏） */
+.highlight-tools .fullpage {
+  display: none !important;
+}
