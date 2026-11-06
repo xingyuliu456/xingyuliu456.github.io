@@ -70,3 +70,59 @@
   position: relative !important;
   z-index: 2 !important;
 }
+
+/* 4. 全局远山星空背景高斯模糊化（彻底消除下滑后的纯白割裂感） */
+#web_bg {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-position: center bottom !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+  filter: blur(20px) brightness(0.96);
+  transform: scale(1.1); /* 适当放大 10% 避免边缘高斯模糊溢出白边 */
+  z-index: -999 !important;
+}
+
+/* 浅色模式下叠加柔和透明白雾遮罩，既隐约透出星空远山轮廓，又保证文字阅读清晰舒适 */
+#web_bg::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(246, 248, 252, 0.72) !important;
+  pointer-events: none;
+}
+
+/* 深色模式下叠加深邃夜空遮罩 */
+[data-theme="dark"] #web_bg::before {
+  background: rgba(15, 23, 42, 0.8) !important;
+}
+
+/* 5. 文章卡片与侧边栏开启半透明毛玻璃质感 (Frosted Glass) */
+.recent-post-item,
+#aside-content .card-widget,
+#page,
+.layout > div:first-child:not(.recent-posts) {
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="dark"] .recent-post-item,
+[data-theme="dark"] #aside-content .card-widget,
+[data-theme="dark"] #page,
+[data-theme="dark"] .layout > div:first-child:not(.recent-posts) {
+  background: rgba(26, 32, 44, 0.82) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+}
