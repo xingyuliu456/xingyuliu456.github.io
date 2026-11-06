@@ -3,7 +3,7 @@ title: 关于
 date: 2026-11-06 00:00:00
 type: "about"
 comments: false
-top_img: https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2560&q=85
+top_img: https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2560&q=85
 ---
 
 ### 关于我

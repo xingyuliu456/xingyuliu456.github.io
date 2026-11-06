@@ -5,7 +5,7 @@ tags:
   - 博客
 categories:
   - 随笔
-cover: https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2560&q=85
+cover: https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=2560&q=85
 ---
 
 欢迎来到我的个人博客！这是 Hexo 与 Butterfly 主题的初始页面。

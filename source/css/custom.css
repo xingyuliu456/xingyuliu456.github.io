@@ -2,26 +2,43 @@
    自定义全局样式优化 (Custom Styles)
    ======================================================== */
 
-/* 1. 消除页脚蓝色突兀感：实现自然透明融合，在深浅色模式下完美呼应 */
+/* 1. 消除页脚蓝色突兀感，并确保浅色/深色模式下文字均清晰可见 */
 #footer {
   background: transparent !important;
-  color: var(--font-color) !important;
+  margin-top: 2rem;
 }
 
 #footer::before {
   display: none !important;
 }
 
+/* 浅色模式 (Light Mode)：高对比度深灰文字，清晰易读 */
+#footer,
+#footer > *,
+#footer #footer-wrap,
 #footer #footer-wrap a,
-#footer #footer-wrap span {
-  color: var(--font-color) !important;
-  opacity: 0.85;
-  transition: opacity 0.3s ease, color 0.3s ease;
+#footer #footer-wrap span,
+#footer .footer-separator,
+#footer .footer_custom_text {
+  color: #4a5568 !important;
+  opacity: 1 !important;
 }
 
-#footer #footer-wrap a:hover {
-  opacity: 1;
-  color: #49b1f5 !important;
+/* 深色模式 (Dark Mode)：柔和银白色文字，自然呼应夜空 */
+[data-theme="dark"] #footer,
+[data-theme="dark"] #footer > *,
+[data-theme="dark"] #footer #footer-wrap,
+[data-theme="dark"] #footer #footer-wrap a,
+[data-theme="dark"] #footer #footer-wrap span,
+[data-theme="dark"] #footer .footer-separator,
+[data-theme="dark"] #footer .footer_custom_text {
+  color: #cbd5e1 !important;
+  opacity: 0.9 !important;
+}
+
+#footer a:hover,
+[data-theme="dark"] #footer a:hover {
+  color: #38bdf8 !important;
 }
 
 /* 2. 侧边栏个人卡片关注按钮适配 */
