@@ -46,3 +46,27 @@
   background-color: #3b82f6 !important;
   border-radius: 8px !important;
 }
+
+/* 3. 动态星空流星雨特效图层适配 */
+#page-header {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+#meteor-canvas {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+#site-info,
+#page-site-info,
+#scroll-down,
+#nav {
+  position: relative !important;
+  z-index: 2 !important;
+}

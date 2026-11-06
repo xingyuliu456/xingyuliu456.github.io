@@ -29,8 +29,8 @@ avatar:
   img: /img/avatar.jpg
   effect: false
 
-# 顶图 Banner (星空与流星主题，契合“星宇”之名)
-index_img: https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=2560&q=85
+# 顶图 Banner (远山星空与动态流星雨，契合“星宇”之名)
+index_img: https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2560&q=85
 archive_img: https://images.unsplash.com/photo-1538370965046-79c0d6907d47?auto=format&fit=crop&w=2560&q=85
 tag_img: https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2560&q=85
 category_img: https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=2560&q=85
@@ -89,7 +89,9 @@ aside:
       text: Follow Me
       link: https://github.com/xingyuliu456
 
-# 自定义样式注入 (消除页脚突兀蓝色，优化排版细节)
+# 自定义样式与脚本注入 (消除页脚突兀蓝色，注入流星雨动态特效)
 inject:
   head:
     - <link rel="stylesheet" href="/css/custom.css">
+  bottom:
+    - <script src="/js/meteor.js"></script>
