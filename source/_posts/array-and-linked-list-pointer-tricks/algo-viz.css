@@ -73,6 +73,8 @@
 .av-cell.kept rect, .av-cell.done rect { fill: var(--av-kept); stroke: var(--av-green); }
 .av-cell.garbage rect { fill: var(--av-garbage); stroke: var(--av-stroke); opacity: 0.65; }
 .av-cell.garbage .av-val { fill: var(--av-muted); }
+.av-cell.val-match rect { fill: var(--av-lost); stroke: var(--av-red); stroke-width: 2px; }
+.av-cell.val-match .av-val { fill: var(--av-red); font-weight: 700; }
 .av-cell.empty rect { fill: transparent; stroke: var(--av-stroke); stroke-dasharray: 4 3; opacity: 0.5; }
 .av-cell.empty .av-val { fill: var(--av-muted); }
 .av-cell.active rect { fill: var(--av-active); stroke: #f59e0b; stroke-width: 2.2; }

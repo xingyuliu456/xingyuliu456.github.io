@@ -64,7 +64,7 @@
       const sx = cellX(o.x0, o.copy.from) + CELL / 2;
       const tx = cellX(o.x0, o.copy.to) + CELL / 2;
       const sy = o.y - 2;
-      const dy = 18 + Math.min(22, Math.abs(sx - tx) * 0.12);
+      const dy = 34 + Math.min(18, Math.abs(sx - tx) * 0.1);
       const g = s('g', { class: 'av-arrow av-arrow-hot' }, svg);
       s('path', {
         d: `M${sx},${sy} C${sx},${sy - dy} ${tx},${sy - dy} ${tx},${sy}`,
@@ -242,14 +242,34 @@
       const a = [0, 1, 2, 2, 3, 0, 4, 2];
       const val = 2;
       const n = a.length;
-      const x0 = 80;
+      const x0 = 100;
+      const labelX = 84;
+      const y = 52;
       const frames = [];
-      const snap = (left, right, mark, copy) => {
-        const cls = a.map((_, i) => (i < left ? 'kept' : i < right ? 'garbage' : ''));
-        if (mark) for (const k in mark) cls[k] += ' ' + mark[k];
+
+      const skipped = {};
+
+      const snap = (left, right, mark, copy, label) => {
+        const cls = a.map((_, i) => {
+          if (i < left) return 'kept';
+          if (skipped[i]) return 'garbage val-match';
+          if (i < right) return 'garbage';
+          return '';
+        });
+        if (mark) {
+          for (const k in mark) {
+            cls[k] = (cls[k] ? cls[k] + ' ' : '') + mark[k];
+          }
+        }
         frames.push({
           arrays: [{
-            x0, labelX: 64, y: 46, label: `val = ${val}`, values: a.slice(), cls, copy,
+            x0,
+            labelX,
+            y,
+            label: label || `val = ${val}`,
+            values: a.slice(),
+            cls,
+            copy,
             pointers: [
               { name: 'left', idx: left, side: 'top', color: 'blue' },
               { name: 'right', idx: right, side: 'bottom', color: 'orange' },
@@ -257,21 +277,38 @@
           }],
         });
       };
+
       let left = 0;
-      snap(0, 0);
+      // 0. 初始状态：left=0, right=0
+      snap(0, 0, null, null, `val = ${val}`);
+
       for (let right = 0; right < n; right++) {
-        if (a[right] !== val) {
+        if (a[right] === val) {
+          // 命中 val：标记为跳过，left 不动，步进非常清晰
+          skipped[right] = true;
+          snap(left, right, { [right]: 'active val-match' }, null, `跳过 val=${val}`);
+        } else {
+          // 第一拍：right 扫描到保留元素，等待写入 left 位置
           const from = right;
           const to = left;
-          a[left] = a[right];
+          snap(left, right, { [from]: 'active' }, null, `保留 ${a[from]}`);
+
+          // 第二拍：执行赋值写入，left 后移一位
+          a[to] = a[from];
           left++;
-          snap(left, right, { [to]: 'written', [from]: 'active' }, { from, to });
-        } else {
-          snap(left, right, { [right]: 'active' });
+          snap(
+            left,
+            right,
+            { [to]: 'written' },
+            from !== to ? { from, to } : null,
+            `写入 nums[${to}]`
+          );
         }
       }
-      snap(left, n);
-      return { frames, view: { w: x0 + (n + 1) * (CELL + GAP) + 16, h: 150 } };
+
+      // 扫描完成：此时 left 即为有效元素个数 k
+      snap(left, n, null, null, `k = ${left}`);
+      return { frames, view: { w: x0 + (n + 1) * (CELL + GAP) + 16, h: 160 } };
     },
   };
 
