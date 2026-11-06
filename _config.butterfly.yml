@@ -22,6 +22,7 @@ menu:
 # 社交链接
 social:
   fab fa-github: https://github.com/xingyuliu456 || GitHub
+  fas fa-envelope: mailto:xingyuliu123@qq.com || 邮箱
 
 # 网站头像与作者卡片 (你的微信头像)
 avatar:
