@@ -79,7 +79,7 @@ footer:
     since: 2026
   custom_text: '<span>Driven by Curiosity & Passion</span>'
 
-# 侧边栏作者卡片优化
+# 侧边栏卡片优化
 aside:
   card_author:
     enable: true
@@ -88,6 +88,10 @@ aside:
       icon: fab fa-github
       text: Follow Me
       link: https://github.com/xingyuliu456
+  card_announcement:
+    enable: false
+  card_recent_post:
+    enable: false
 
 # 自定义样式与脚本注入 (消除页脚突兀蓝色，注入流星雨动态特效)
 inject:

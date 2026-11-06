@@ -63,9 +63,7 @@
   z-index: 1 !important;
 }
 
-#site-info,
 #page-site-info,
-#scroll-down,
 #nav {
   position: relative !important;
   z-index: 2 !important;
@@ -127,15 +125,21 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
 }
 
-/* 6. 首页标题与副标题垂直居中，隐藏下箭头 */
+/* 6. 首页标题与副标题精准居中于星空中央，彻底隐藏下箭头 */
 #scroll-down {
   display: none !important;
 }
 
 #page-header.full_page #site-info {
-  top: 50% !important;
+  position: absolute !important;
+  top: 42% !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin: 0 auto !important;
   transform: translateY(-50%) !important;
   padding: 0 20px !important;
+  text-align: center !important;
+  z-index: 2 !important;
 }
 
 #site-title {
@@ -144,4 +148,10 @@
 
 #site-subtitle {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 7. 移除不需要的公告栏与最新文章栏 */
+.card-announcement,
+.card-recent-post {
+  display: none !important;
 }
