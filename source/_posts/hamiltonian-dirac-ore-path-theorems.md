@@ -5,7 +5,8 @@ categories:
   - 离散数学2
 tags:
   - 图论
-katex: true
+cover: https://images.unsplash.com/photo-1793041119006-fd1b5bee35b1?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D
+
 description: 结论先行梳理 Dirac、Ore 与哈密顿链定理，保留 Ore 原始证明、Dirac 一行速证与哈密顿链添点归约证明，并以 Mermaid 可视化三者关联。
 ---
 
