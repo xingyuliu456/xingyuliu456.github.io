@@ -111,9 +111,10 @@ mermaid:
   open_in_new_tab: true
   zoom_pan: true
 
-# 自定义样式与脚本注入 (消除页脚突兀蓝色，注入流星雨动态特效)
+# 自定义样式与脚本注入 (消除页脚突兀蓝色，注入流星雨动态特效与全局 KaTeX CSS)
 inject:
   head:
     - <link rel="stylesheet" href="/css/custom.css">
+    - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css">
   bottom:
     - <script src="/js/meteor.js"></script>

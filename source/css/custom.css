@@ -215,3 +215,190 @@
 .highlight-tools .fullpage {
   display: none !important;
 }
+
+
+/* ========================================================
+   9. 对齐 VSCode MPE (Markdown Preview Enhanced) 扩展样式
+   ======================================================== */
+
+/* (1) MPE 任务清单 (Task Lists) 复选框美化 */
+.contains-task-list {
+  list-style-type: none !important;
+  padding-left: 0.2rem !important;
+}
+
+.task-list-item {
+  list-style: none !important;
+  display: flex !important;
+  align-items: center !important;
+  margin: 0.4rem 0 !important;
+  font-size: 0.98rem !important;
+}
+
+.task-list-item-checkbox {
+  margin-right: 0.65rem !important;
+  width: 1.15rem !important;
+  height: 1.15rem !important;
+  accent-color: #3b82f6 !important;
+  cursor: pointer !important;
+  vertical-align: middle !important;
+}
+
+.task-list-item label {
+  cursor: pointer !important;
+  margin: 0 !important;
+}
+
+/* (2) MPE 荧光笔高亮 (==mark==) 效果 */
+#article-container mark {
+  background-color: rgba(254, 240, 138, 0.75) !important;
+  color: #1e293b !important;
+  padding: 0.15rem 0.45rem !important;
+  border-radius: 4px !important;
+  border-bottom: 2px solid #facc15 !important;
+  font-weight: 500 !important;
+}
+
+[data-theme="dark"] #article-container mark {
+  background-color: rgba(234, 179, 8, 0.28) !important;
+  color: #fef08a !important;
+  border-bottom-color: #eab308 !important;
+}
+
+/* (3) MPE 插入文字 (++inserted++) */
+#article-container ins {
+  text-decoration: underline !important;
+  text-decoration-color: #3b82f6 !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 3px !important;
+}
+
+/* (4) MPE / VitePress 风格现代容器块 (Custom Blocks / Callouts) */
+.custom-block {
+  margin: 1.25rem 0 !important;
+  padding: 0.9rem 1.35rem !important;
+  border-radius: 10px !important;
+  border-left: 5px solid transparent !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.25s ease !important;
+}
+
+.custom-block .custom-block-title {
+  font-weight: 700 !important;
+  margin: 0 0 0.45rem 0 !important;
+  font-size: 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+.custom-block .custom-block-title i {
+  font-size: 1.05rem !important;
+}
+
+.custom-block p {
+  margin: 0.35rem 0 !important;
+  line-height: 1.7 !important;
+}
+
+/* TIP (提示 - 绿色系) */
+.custom-block.tip {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+  border-left-color: #10b981 !important;
+}
+.custom-block.tip .custom-block-title {
+  color: #059669 !important;
+}
+[data-theme="dark"] .custom-block.tip {
+  background-color: rgba(16, 185, 129, 0.16) !important;
+}
+[data-theme="dark"] .custom-block.tip .custom-block-title {
+  color: #34d399 !important;
+}
+
+/* INFO & NOTE (信息/说明 - 蓝色系) */
+.custom-block.info,
+.custom-block.note {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+  border-left-color: #3b82f6 !important;
+}
+.custom-block.info .custom-block-title,
+.custom-block.note .custom-block-title {
+  color: #2563eb !important;
+}
+[data-theme="dark"] .custom-block.info,
+[data-theme="dark"] .custom-block.note {
+  background-color: rgba(59, 130, 246, 0.16) !important;
+}
+[data-theme="dark"] .custom-block.info .custom-block-title,
+[data-theme="dark"] .custom-block.note .custom-block-title {
+  color: #60a5fa !important;
+}
+
+/* WARNING (警告 - 橙黄色系) */
+.custom-block.warning {
+  background-color: rgba(245, 158, 11, 0.09) !important;
+  border-left-color: #f59e0b !important;
+}
+.custom-block.warning .custom-block-title {
+  color: #d97706 !important;
+}
+[data-theme="dark"] .custom-block.warning {
+  background-color: rgba(245, 158, 11, 0.16) !important;
+}
+[data-theme="dark"] .custom-block.warning .custom-block-title {
+  color: #fbbf24 !important;
+}
+
+/* DANGER (危险 - 红色系) */
+.custom-block.danger {
+  background-color: rgba(239, 68, 68, 0.09) !important;
+  border-left-color: #ef4444 !important;
+}
+.custom-block.danger .custom-block-title {
+  color: #dc2626 !important;
+}
+[data-theme="dark"] .custom-block.danger {
+  background-color: rgba(239, 68, 68, 0.16) !important;
+}
+[data-theme="dark"] .custom-block.danger .custom-block-title {
+  color: #f87171 !important;
+}
+
+/* (5) MPE 脚注 (Footnotes) 样式美化 */
+.footnotes {
+  margin-top: 2.5rem !important;
+  font-size: 0.88rem !important;
+  opacity: 0.85 !important;
+  border-top: 1px dashed rgba(150, 150, 150, 0.3) !important;
+  padding-top: 1rem !important;
+}
+
+.footnotes-sep {
+  display: none !important;
+}
+
+.footnote-backref {
+  text-decoration: none !important;
+  margin-left: 0.3rem !important;
+  color: #3b82f6 !important;
+}
+
+/* (6) KaTeX 公式显示与超宽自适应保护 (彻底消除 Butterfly 默认 display:none 导致公式隐形的问题) */
+#article-container .katex {
+  display: inline-block !important;
+}
+
+#article-container .katex-display {
+  display: block !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 0.5rem 0 !important;
+  max-width: 100% !important;
+  scrollbar-width: thin !important;
+}
+
+#article-container .katex-display .katex {
+  display: block !important;
+  text-align: center !important;
+}
