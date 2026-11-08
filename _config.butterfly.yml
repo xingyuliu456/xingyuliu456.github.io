@@ -93,6 +93,24 @@ aside:
   card_recent_post:
     enable: false
 
+# 数学公式渲染 (配合 hexo-renderer-markdown-it + KaTeX，支持行内 $...$ 与块级 $$...$$)
+math:
+  use: katex
+  per_page: true
+  hide_scrollbar: false
+  katex:
+    copy_tex: true
+
+# Mermaid 流程图渲染 (支持标准 ```mermaid 代码块)
+mermaid:
+  enable: true
+  code_write: true
+  theme:
+    light: default
+    dark: dark
+  open_in_new_tab: true
+  zoom_pan: true
+
 # 自定义样式与脚本注入 (消除页脚突兀蓝色，注入流星雨动态特效)
 inject:
   head:

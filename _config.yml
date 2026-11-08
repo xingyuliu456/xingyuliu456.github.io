@@ -82,8 +82,28 @@ per_page: 10
 pagination_dir: page
 
 # Extensions
+## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: butterfly
+
+# Markdown-it 渲染引擎（兼容 VSCode 风格的行内/块级 LaTeX 公式与 GFM 语法）
+markdown:
+  preset: 'default'
+  render:
+    html: true
+    xhtmlOut: false
+    breaks: true
+    linkify: true
+    typographer: false
+  anchors:
+    level: 2
+    collisionSuffix: ''
+    permalink: false
+  plugins:
+    - name: '@renbaoshuo/markdown-it-katex'
+      options:
+        throwOnError: false
+        strict: false
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
