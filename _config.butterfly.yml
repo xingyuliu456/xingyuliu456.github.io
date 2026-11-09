@@ -96,7 +96,7 @@ aside:
 # 数学公式渲染 (配合 hexo-renderer-markdown-it + KaTeX，支持行内 $...$ 与块级 $$...$$)
 math:
   use: katex
-  per_page: false
+  per_page: true
   hide_scrollbar: false
   katex:
     copy_tex: true
@@ -115,5 +115,6 @@ mermaid:
 inject:
   head:
     - <link rel="stylesheet" href="/css/custom.css">
+    - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css">
   bottom:
     - <script src="/js/meteor.js"></script>

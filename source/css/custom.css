@@ -389,6 +389,10 @@
   display: inline-block !important;
 }
 
+#article-container .katex .katex-mathml {
+  display: none !important;
+}
+
 #article-container .katex-display {
   display: block !important;
   overflow-x: auto !important;

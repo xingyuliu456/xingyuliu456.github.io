@@ -115,6 +115,7 @@ markdown:
       options:
         throwOnError: false
         strict: false
+        output: 'html'
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
