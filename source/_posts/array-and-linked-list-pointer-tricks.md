@@ -1,5 +1,6 @@
 ---
 title: 顺序表与链表经典题：六道题背后的指针思维
+permalink: array-linked-list-pointer-tricks
 date: 2026-11-06 21:30:00
 categories:
   - 算法与数据结构

@@ -111,10 +111,49 @@ mermaid:
   open_in_new_tab: true
   zoom_pan: true
 
-# 自定义样式与脚本注入 (消除页脚突兀蓝色，注入流星雨动态特效与全局 KaTeX CSS)
+# 搜索系统 (本地全文检索)
+local_search:
+  enable: true
+
+search:
+  use: local_search
+  placeholder: 搜索文章...
+  local_search:
+    preload: false
+    top_n_per_article: 1
+    unescape: false
+    pagination:
+      enable: false
+      hitsPerPage: 8
+
+# 评论系统 (Butterfly 原生轻量评论支持)
+# 推荐使用 Giscus（基于 GitHub Discussions，免部署、轻量无广告、天然适合 GitHub Pages 个人博客）
+comments:
+  # 启用评论请输入: Giscus 或 Twikoo / Waline；留空为不加载评论
+  use: 
+  text: true
+  lazyload: true
+  count: false
+  card_post_count: false
+
+# Giscus 详细配置 (访问 https://giscus.app 授权你的 GitHub 仓库并开启 Discussions 即可获取 repoId 和 categoryId)
+giscus:
+  repo: xingyuliu456/xingyuliu456.github.io
+  repo_id: 
+  category: Announcements
+  category_id: 
+  mapping: pathname
+  strict: 0
+  reactions_enabled: 1
+  emit_metadata: 0
+  input_position: bottom
+  light_theme: light
+  dark_theme: dark
+  lazyload: true
+
+# 自定义样式与脚本注入 (注入全局 KaTeX CSS 与自定义样式，已移除动态流星雨，保留静谧星空背景)
 inject:
   head:
     - <link rel="stylesheet" href="/css/custom.css">
     - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css">
   bottom:
-    - <script src="/js/meteor.js"></script>

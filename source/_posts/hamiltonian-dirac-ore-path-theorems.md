@@ -1,5 +1,6 @@
 ---
 title: 哈密顿图与哈密顿链的度数充分条件：Dirac、Ore 与哈密顿链定理
+permalink: hamiltonian
 date: 2026-11-08 21:20:00
 categories:
   - 离散数学2

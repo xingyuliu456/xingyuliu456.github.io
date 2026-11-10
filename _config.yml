@@ -5,8 +5,8 @@
 # Site
 title: "Xingyu's Tech Space"
 subtitle: 'Stay hungry, stay foolish'
-description: '技术探索、具身智能与工程实践'
-keywords: 'AI, Embodied AI, Robotics, Deep Learning, Tech'
+description: '刘星宇的技术博客，专注具身智能 (Embodied AI)、机器人学、深度学习与算法、离散数学等领域的学习思考与工程实践。'
+keywords: '刘星宇,具身智能,Embodied AI,机器人,深度学习,算法与数据结构,离散数学,图论,Tech Blog'
 author: Xingyu Liu
 language: zh-CN
 timezone: 'Asia/Shanghai'
@@ -116,6 +116,20 @@ markdown:
         throwOnError: false
         strict: false
         output: 'html'
+
+# Local Search (hexo-generator-searchdb)
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html
+
+# Sitemap (hexo-generator-sitemap)
+sitemap:
+  path: sitemap.xml
+  rel: false
+  tags: true
+  categories: true
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
