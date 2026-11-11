@@ -15,18 +15,21 @@ Features:
    - tags: from frontmatter > inline `#tag`
    - permalink: preserved or auto-generated
    - description: from frontmatter > first 150 chars
-3. Asset & Image Management:
+3. Transclusion / Note Embeds:
+   - Expands embedded notes `![[note]]` and `![alt](relative/path/note.md)` into post body
+4. Asset & Image Management:
    - Finds local image references `![](...)` and `![[...]]`
    - Copies referenced images to Hexo companion asset folder `source/_posts/<slug>/`
    - Rewrites markdown image paths to clean relative paths
-4. Obsidian Syntax Translation:
+5. Obsidian Syntax Translation:
    - Callouts `> [!tip] Title` -> Hexo container `::: tip Title`
    - Wikilinks `[[Note|Label]]` -> link if published, plain text if private
    - Comments `%% ... %%` -> stripped
-5. Cache & Unpublish Cleanup:
+6. Cache & Safe Unpublish Cleanup:
    - Tracks synced notes in `.sync_cache.json`
-   - Automatically removes Hexo posts and asset folders if note is deleted or set to publish: false
-6. Git Automation:
+   - Strictly validates destination paths to prevent deleting unintended folders
+   - Safely removes Hexo posts and asset folders if note is deleted or set to publish: false
+7. Git Automation:
    - Auto commits changes in Hexo repo
    - Auto pushes to GitHub to trigger GitHub Actions deployment
 """
@@ -43,6 +46,9 @@ import subprocess
 import urllib.parse
 from pathlib import Path
 from datetime import datetime
+
+# Image file extensions
+IMAGE_EXTS = ('.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.bmp', '.ico')
 
 # Callout type mapping from Obsidian to Hexo container
 CALLOUT_MAP = {
@@ -80,7 +86,7 @@ def load_config(config_path: Path) -> dict:
         "vault_path": r"D:\My-Knowledge-Vault",
         "hexo_posts_path": r"source\_posts",
         "publish_flag": "publish",
-        "ignored_folders": [".obsidian", ".trash", ".trash_backup", ".git"],
+        "ignored_folders": [".obsidian", ".trash", ".trash_backup", ".git", "_templates", "templates"],
         "auto_git_commit": True,
         "auto_git_push": True,
         "convert_callouts": True,
@@ -120,7 +126,6 @@ def parse_frontmatter(content: str):
     if not content.startswith('---'):
         return {}, content
 
-    # Find the closing ---
     match = re.match(r'^---\r?\n(.*?)\r?\n---\r?\n(.*)$', content, re.DOTALL)
     if not match:
         return {}, content
@@ -138,7 +143,6 @@ def parse_frontmatter(content: str):
 def is_published(fm: dict, publish_flag: str) -> bool:
     val = fm.get(publish_flag)
     if val is None:
-        # Also check alternative common keys
         val = fm.get('published') or fm.get('blog')
     if val is None:
         return False
@@ -161,10 +165,79 @@ def extract_h1_title(body: str):
     match = re.search(r'^\s*#\s+([^\r\n]+)\r?\n', body)
     if match:
         title = match.group(1).strip()
-        # Remove the first H1 line so it won't duplicate with Hexo's post title
         new_body = body[:match.start()] + body[match.end():]
         return title, new_body
     return None, body
+
+def expand_transclusions(body: str, note_path: Path, vault_path: Path, depth: int = 0) -> str:
+    """
+    Expand embedded notes:
+    1. Standard Markdown embeds: ![alt](path/to/note.md)
+    2. Obsidian wikilink embeds: ![[Note Name]] (when not an image)
+    """
+    if depth > 4:
+        return body
+
+    # 1. Expand ![title](relative.md)
+    def replace_md_embed(match):
+        caption = match.group(1)
+        raw_target = urllib.parse.unquote(match.group(2).strip()).replace('\\', '/')
+        if not raw_target.lower().endswith(('.md', '.markdown')):
+            return match.group(0)
+
+        cand = (note_path.parent / raw_target).resolve()
+        if not cand.is_file():
+            # Search vault
+            base = Path(raw_target).name
+            for f in vault_path.rglob(base):
+                if f.is_file() and not any(part in f.parts for part in ['.obsidian', '.git', '.trash', '_templates']):
+                    cand = f
+                    break
+
+        if cand.is_file():
+            try:
+                with open(cand, 'r', encoding='utf-8') as f:
+                    sub_text = f.read()
+                _, sub_body = parse_frontmatter(sub_text)
+                print(f"  [EMBED] Expanded embedded note: {cand.name}")
+                return expand_transclusions(sub_body, cand, vault_path, depth + 1)
+            except Exception as e:
+                print(f"[WARN] Failed to read embedded note {cand}: {e}")
+                return match.group(0)
+        return match.group(0)
+
+    body = re.sub(r'!\[(.*?)\]\((.*?)\)', replace_md_embed, body)
+
+    # 2. Expand ![[Note Name]]
+    def replace_wikilink_embed(match):
+        inner = match.group(1).strip()
+        parts = inner.split('|')
+        raw_target = parts[0].strip()
+        if any(raw_target.lower().endswith(ext) for ext in IMAGE_EXTS):
+            return match.group(0)
+
+        cand_name = raw_target if raw_target.lower().endswith('.md') else f"{raw_target}.md"
+        cand = (note_path.parent / cand_name).resolve()
+        if not cand.is_file():
+            for f in vault_path.rglob(cand_name):
+                if f.is_file() and not any(part in f.parts for part in ['.obsidian', '.git', '.trash', '_templates']):
+                    cand = f
+                    break
+
+        if cand.is_file():
+            try:
+                with open(cand, 'r', encoding='utf-8') as f:
+                    sub_text = f.read()
+                _, sub_body = parse_frontmatter(sub_text)
+                print(f"  [EMBED] Expanded embedded note: {cand.name}")
+                return expand_transclusions(sub_body, cand, vault_path, depth + 1)
+            except Exception as e:
+                print(f"[WARN] Failed to read embedded note {cand}: {e}")
+                return match.group(0)
+        return match.group(0)
+
+    body = re.sub(r'!\[\[(.*?)\]\]', replace_wikilink_embed, body)
+    return body
 
 def convert_callouts(body: str) -> str:
     """
@@ -189,7 +262,6 @@ def convert_callouts(body: str) -> str:
         line = lines[i]
         header_match = callout_header_regex.match(line)
         if header_match:
-            # If already in a callout, close it
             if in_callout:
                 output.append(':::')
                 in_callout = False
@@ -207,18 +279,14 @@ def convert_callouts(body: str) -> str:
             continue
 
         if in_callout:
-            # Check if this line is still part of the blockquote
             if line.startswith('>') or line.startswith(' >'):
-                # Strip leading '>' and optional space
                 stripped = re.sub(r'^\s*>\s?', '', line)
                 output.append(stripped)
                 i += 1
                 continue
             else:
-                # End of callout
                 output.append(':::')
                 in_callout = False
-                # Proceed to process current line normally
                 output.append(line)
                 i += 1
                 continue
@@ -232,15 +300,7 @@ def convert_callouts(body: str) -> str:
     return '\n'.join(output)
 
 def find_asset_file(image_ref: str, note_path: Path, vault_path: Path) -> Path:
-    """
-    Locate an image/asset referenced in note.
-    Checks:
-    1. note_dir / image_ref
-    2. note_dir / "assets" / image_ref
-    3. vault_path / "assets" / image_ref
-    4. Substrings in note_dir / "assets"
-    5. Recursive search in vault if not found
-    """
+    """Locate an image/asset referenced in note."""
     clean_ref = urllib.parse.unquote(image_ref).replace('\\', '/')
     base_name = Path(clean_ref).name
     note_dir = note_path.parent
@@ -257,16 +317,14 @@ def find_asset_file(image_ref: str, note_path: Path, vault_path: Path) -> Path:
         if cand.is_file():
             return cand
 
-    # If still not found, search in note_dir's assets folder recursively
     assets_dir = note_dir / "assets"
     if assets_dir.is_dir():
         for f in assets_dir.rglob(base_name):
             if f.is_file():
                 return f
 
-    # Vault-wide search as fallback
     for f in vault_path.rglob(base_name):
-        if f.is_file() and not any(part in f.parts for part in ['.obsidian', '.git', '.trash']):
+        if f.is_file() and not any(part in f.parts for part in ['.obsidian', '.git', '.trash', '_templates']):
             return f
 
     return None
@@ -279,9 +337,7 @@ def process_images_and_links(body: str, note_path: Path, vault_path: Path,
     2. Copy referenced images to dest_asset_dir and rewrite image links
     3. Process wikilinks [[Target|Label]]: link if published, plain text if private
     """
-    # 1. Strip comments
     body = re.sub(r'%%.*?%%', '', body, flags=re.DOTALL)
-
     copied_assets = set()
 
     # 2. Process Wikilink Images: ![[image.png]] or ![[image.png|width]]
@@ -294,7 +350,6 @@ def process_images_and_links(body: str, note_path: Path, vault_path: Path,
         asset_file = find_asset_file(raw_target, note_path, vault_path)
         if asset_file:
             dest_asset_dir.mkdir(parents=True, exist_ok=True)
-            # Create a clean safe filename without spaces
             clean_name = re.sub(r'\s+', '-', asset_file.name)
             target_path = dest_asset_dir / clean_name
             shutil.copy2(asset_file, target_path)
@@ -315,7 +370,6 @@ def process_images_and_links(body: str, note_path: Path, vault_path: Path,
         caption = match.group(1)
         raw_target = match.group(2).strip()
 
-        # If it's a web link, keep as is
         if raw_target.startswith('http://') or raw_target.startswith('https://') or raw_target.startswith('//'):
             return match.group(0)
 
@@ -340,25 +394,20 @@ def process_images_and_links(body: str, note_path: Path, vault_path: Path,
         target = parts[0].strip()
         display = parts[1].strip() if len(parts) > 1 else target
 
-        # Separate heading anchor if any: Target#Heading
         heading = ''
         if '#' in target:
             target, heading = target.split('#', 1)
             heading = '#' + clean_slug(heading)
 
-        # Check if target note is published
         clean_target = Path(target).stem
         if clean_target in published_map:
             pub_info = published_map[clean_target]
             slug = pub_info.get('permalink') or pub_info.get('slug')
             return f'[{display}](/posts/{slug}/{heading})'
         else:
-            # Private note or external: strip link to plain text
             return display
 
-    # Negative lookbehind to avoid matching ![[...]]
     body = re.sub(r'(?<!!)\[\[(.*?)\]\]', replace_wikilink, body)
-
     return body, copied_assets
 
 def generate_description(body: str, max_len: int = 150) -> str:
@@ -371,7 +420,6 @@ def generate_description(body: str, max_len: int = 150) -> str:
             continue
         desc = line
         break
-    # Strip basic markdown markers
     desc = re.sub(r'[*_`~[\]]', '', desc)
     if len(desc) > max_len:
         desc = desc[:max_len] + '...'
@@ -417,7 +465,7 @@ def sync(dry_run: bool = False, no_push: bool = False, force: bool = False):
         try:
             with open(md_path, 'r', encoding='utf-8') as f:
                 content = f.read()
-        except Exception as e:
+        except Exception:
             continue
 
         fm, body = parse_frontmatter(content)
@@ -449,16 +497,34 @@ def sync(dry_run: bool = False, no_push: bool = False, force: bool = False):
             unpublish_list.append((rel_path, c_info))
 
     for rel_path, c_info in unpublish_list:
-        post_file = root_dir / c_info.get("hexo_file", "")
-        asset_dir = root_dir / c_info.get("hexo_asset_dir", "")
+        rel_post = (c_info.get("hexo_file") or "").strip()
+        rel_asset = (c_info.get("hexo_asset_dir") or "").strip()
         print(f"[UNPUBLISH] Removing previously published note: {rel_path}")
         if not dry_run:
-            if post_file.is_file():
-                post_file.unlink()
-                print(f"  - Deleted {post_file}")
-            if asset_dir.is_dir():
-                shutil.rmtree(asset_dir)
-                print(f"  - Deleted asset folder {asset_dir}")
+            if rel_post:
+                post_file = root_dir / rel_post
+                if post_file.is_file():
+                    try:
+                        post_file.unlink()
+                        print(f"  - Deleted post file {post_file}")
+                    except Exception as e:
+                        print(f"[WARN] Failed to delete {post_file}: {e}")
+
+            # STRICT SAFETY CHECK: Only delete asset folder if non-empty and strictly inside hexo_posts_path
+            if rel_asset:
+                asset_dir = root_dir / rel_asset
+                try:
+                    resolved_asset = asset_dir.resolve()
+                    resolved_posts = hexo_posts_path.resolve()
+                    if resolved_asset != resolved_posts and resolved_asset.is_relative_to(resolved_posts):
+                        if resolved_asset.is_dir():
+                            shutil.rmtree(resolved_asset)
+                            print(f"  - Deleted asset folder {resolved_asset}")
+                    else:
+                        print(f"[WARN] Asset directory {asset_dir} outside posts dir, deletion skipped for safety.")
+                except Exception as e:
+                    print(f"[WARN] Failed to delete asset dir {asset_dir}: {e}")
+
             del cached_notes[rel_path]
 
     # Pass 3: Sync each published note
@@ -475,19 +541,23 @@ def sync(dry_run: bool = False, no_push: bool = False, force: bool = False):
 
         # Content hash check for fast incremental skipping
         content_hash = calculate_sha256(note["content"])
+        rel_hexo_check = cached_notes.get(rel_path, {}).get("hexo_file", "").strip()
         if not force and rel_path in cached_notes and cached_notes[rel_path].get("sha256") == content_hash:
-            # Check if hexo file still exists
-            expected_hexo_file = root_dir / cached_notes[rel_path].get("hexo_file", "")
-            if expected_hexo_file.exists():
+            if rel_hexo_check and (root_dir / rel_hexo_check).is_file():
                 skip_count += 1
                 continue
 
         print(f"[SYNC] Processing: {rel_path} -> slug: {slug}")
 
-        # Title: Frontmatter > H1 in body > Note filename
-        if 'title' not in fm:
+        # Clean title: strip quotes if present
+        if 'title' in fm and isinstance(fm['title'], str):
+            fm['title'] = fm['title'].strip('\'"')
+        elif 'title' not in fm:
             extracted_title, body = extract_h1_title(body)
             fm['title'] = extracted_title or note_stem
+
+        # Expand transclusions / embedded notes (e.g. ![git核心命令](../git操作/git核心命令.md))
+        body = expand_transclusions(body, md_path, vault_path)
 
         # Date & Updated
         stat = md_path.stat()
@@ -499,9 +569,10 @@ def sync(dry_run: bool = False, no_push: bool = False, force: bool = False):
         # Categories: derive from vault directory path if not provided
         if 'categories' not in fm:
             parent_parts = [p for p in md_path.relative_to(vault_path).parent.parts if p]
-            # Clean numbered prefix (e.g. "01-基本概念" -> "01-基本概念")
-            if parent_parts:
-                fm['categories'] = list(parent_parts)
+            # If note is in 00-Blog, don't label category as 00-Blog
+            filtered_parts = [p for p in parent_parts if not p.lower().endswith(('blog', '00-blog'))]
+            if filtered_parts:
+                fm['categories'] = list(filtered_parts)
 
         # Tags: parse inline #tag if tags not in frontmatter
         if 'tags' not in fm:
@@ -533,7 +604,6 @@ def sync(dry_run: bool = False, no_push: bool = False, force: bool = False):
         )
 
         # Construct new frontmatter string
-        # Clean internal publish flag if desired or keep it
         frontmatter_str = yaml.dump(fm, allow_unicode=True, default_flow_style=False, sort_keys=False)
         final_content = f"---\n{frontmatter_str}---\n\n{body.lstrip()}\n"
 
@@ -544,7 +614,8 @@ def sync(dry_run: bool = False, no_push: bool = False, force: bool = False):
 
             # Update cache
             rel_hexo_file = str(dest_md_file.relative_to(root_dir))
-            rel_asset_dir = str(dest_asset_dir.relative_to(root_dir)) if dest_asset_dir.exists() else ""
+            has_assets = dest_asset_dir.is_dir() and any(dest_asset_dir.iterdir())
+            rel_asset_dir = str(dest_asset_dir.relative_to(root_dir)) if has_assets else ""
             cached_notes[rel_path] = {
                 "sha256": content_hash,
                 "hexo_file": rel_hexo_file,
@@ -566,7 +637,6 @@ def sync(dry_run: bool = False, no_push: bool = False, force: bool = False):
         return
 
     if config.get("auto_git_commit", True):
-        # Check git status
         try:
             status_res = subprocess.run(
                 ["git", "status", "--porcelain", "source/_posts"],

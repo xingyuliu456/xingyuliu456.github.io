@@ -6,7 +6,9 @@
     ".obsidian",
     ".trash",
     ".trash_backup",
-    ".git"
+    ".git",
+    "_templates",
+    "templates"
   ],
   "auto_git_commit": true,
   "auto_git_push": true,
