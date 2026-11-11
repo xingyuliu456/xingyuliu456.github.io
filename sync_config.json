@@ -1,0 +1,16 @@
+{
+  "vault_path": "D:\\My-Knowledge-Vault",
+  "hexo_posts_path": "source/_posts",
+  "publish_flag": "publish",
+  "ignored_folders": [
+    ".obsidian",
+    ".trash",
+    ".trash_backup",
+    ".git"
+  ],
+  "auto_git_commit": true,
+  "auto_git_push": true,
+  "convert_callouts": true,
+  "convert_wikilinks": true,
+  "clean_unreferenced_assets": true
+}

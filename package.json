@@ -9,7 +9,10 @@
     "build": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
-    "server": "hexo server"
+    "server": "hexo server",
+    "sync": "D:\\Software\\miniconda\\envs\\ai312\\python.exe tools/sync_obsidian_to_hexo.py",
+    "sync:dry": "D:\\Software\\miniconda\\envs\\ai312\\python.exe tools/sync_obsidian_to_hexo.py --dry-run",
+    "sync:no-push": "D:\\Software\\miniconda\\envs\\ai312\\python.exe tools/sync_obsidian_to_hexo.py --no-push"
   },
   "dependencies": {
     "@renbaoshuo/markdown-it-katex": "^2.0.2",
