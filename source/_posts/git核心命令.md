@@ -4,9 +4,9 @@ publish: true
 tags:
 - 命令行
 - git
-cover: https://unsplash.com/photos/brisbane-powerhouse-on-riverbank-at-sunset-U00K44271h0
+cover: https://images.unsplash.com/photo-1788104317221-e85195344eb2?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D
 date: '2026-10-12 16:34:29'
-updated: '2026-11-11 16:45:19'
+updated: '2026-11-11 16:48:36'
 categories:
 - git操作
 permalink: git核心命令
