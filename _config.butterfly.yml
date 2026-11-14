@@ -154,7 +154,7 @@ giscus:
 # 自定义样式与脚本注入 (注入 KaTeX CSS、自定义样式，以及首页专属互动星空极光与流星动效)
 inject:
   head:
-    - <link rel="stylesheet" href="/css/custom.css">
+    - <link rel="stylesheet" href="/css/custom.css?v=20261114-2">
     - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css">
   bottom:
-    - <script src="/js/hero-cosmos.js"></script>
+    - <script src="/js/hero-cosmos.js?v=20261114-2"></script>
