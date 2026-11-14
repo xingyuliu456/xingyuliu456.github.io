@@ -151,9 +151,10 @@ giscus:
   dark_theme: dark
   lazyload: true
 
-# 自定义样式与脚本注入 (注入全局 KaTeX CSS 与自定义样式，已移除动态流星雨，保留静谧星空背景)
+# 自定义样式与脚本注入 (注入 KaTeX CSS、自定义样式，以及首页专属互动星空极光与流星动效)
 inject:
   head:
     - <link rel="stylesheet" href="/css/custom.css">
     - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css">
   bottom:
+    - <script src="/js/hero-cosmos.js"></script>
