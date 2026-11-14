@@ -9,8 +9,7 @@ tags:
 cover: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqspQ21bs3Vw6cDT8SD2kMitIcxFb50LdVzDVe4-M0V_aNhXqLETS9jYTq&s=10
 description: 从 P4 到 P5X：单周期 MIPS CPU 异常处理改造全记录（避坑指南版）
 date: 2026-11-14 19:07:10
-update: 2026-11-14 19:07:10
-updated: '2026-11-14 19:11:28'
+updated: '2026-11-14 19:50:13'
 ---
 
 # 从 P4 到 P5X：单周期 MIPS CPU 异常处理改造全记录（避坑指南版）
@@ -300,7 +299,7 @@ assign ExcCodeIn = exc_AdEL_IF ? 5'd4  :
 // CP0: .en(CP0Write & ~Req)
 ```
 
-- **提醒**：注意要把所有新增加的信号都提前在mips里面提前声明。
+- **提醒**：注意要把所有新增加的信号都提前在mips里面声明。
   
 
 ---

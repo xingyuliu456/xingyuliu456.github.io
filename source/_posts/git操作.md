@@ -10,8 +10,7 @@ tags:
 cover: https://images.unsplash.com/photo-1788104317221-e85195344eb2?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D
 description: 介绍了基本的git操作
 date: 2026-11-11 21:31:15
-update: 2026-11-11 21:31:15
-updated: '2026-11-11 21:32:54'
+updated: '2026-11-11 21:33:15'
 ---
 
 ### Git 核心心智模型与常用命令速查
