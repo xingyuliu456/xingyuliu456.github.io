@@ -32,6 +32,7 @@
     "hexo-wordcount": "^6.0.1",
     "katex": "^0.18.1",
     "markdown-it-abbr": "^2.0.0",
+    "markdown-it-cjk-friendly": "^3.0.0",
     "markdown-it-container": "^4.0.0",
     "markdown-it-deflist": "^4.0.0",
     "markdown-it-emoji": "^3.1.0",

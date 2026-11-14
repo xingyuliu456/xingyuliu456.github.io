@@ -2,6 +2,30 @@
 
 const container = require('markdown-it-container');
 
+function resolvePlugin(mod) {
+  return (mod && typeof mod === 'object' && typeof mod.default === 'function')
+    ? mod.default
+    : mod;
+}
+
+let cjkFriendlyPlugin = null;
+
+try {
+  cjkFriendlyPlugin = resolvePlugin(require('markdown-it-cjk-friendly'));
+} catch (err) {
+  if (err && err.code === 'ERR_REQUIRE_ESM') {
+    // Fallback for Node < 20.19 where require(esm) is unavailable
+    hexo.extend.filter.register('after_init', async function () {
+      if (!cjkFriendlyPlugin) {
+        const mod = await import('markdown-it-cjk-friendly');
+        cjkFriendlyPlugin = resolvePlugin(mod);
+      }
+    });
+  } else {
+    throw err;
+  }
+}
+
 function createContainer(md, type, defaultTitle, icon) {
   md.use(container, type, {
     render: function (tokens, idx) {
@@ -21,6 +45,11 @@ function createContainer(md, type, defaultTitle, icon) {
 hexo.extend.filter.register('markdown-it:renderer', function (md) {
   if (md.__mpe_initialized) return;
   md.__mpe_initialized = true;
+
+  // 0. 兼容 CJK 字符与标点相邻时的粗体/斜体边界解析（如 **“...”**、**「...」**）
+  if (typeof cjkFriendlyPlugin === 'function') {
+    md.use(cjkFriendlyPlugin);
+  }
 
   // 1. MPE 常用排版扩展插件
   md.use(require('markdown-it-sub'))

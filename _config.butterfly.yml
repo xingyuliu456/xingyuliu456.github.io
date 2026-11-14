@@ -93,6 +93,15 @@ aside:
   card_recent_post:
     enable: false
 
+# 文章目录 (TOC)：关闭自动编号并默认展开全部层级，保留阅读百分比与当前高亮条
+toc:
+  post: true
+  page: false
+  number: false
+  expand: true
+  style_simple: false
+  scroll_percent: true
+
 # 数学公式渲染 (配合 hexo-renderer-markdown-it + KaTeX，支持行内 $...$ 与块级 $$...$$)
 math:
   use: katex
@@ -154,7 +163,7 @@ giscus:
 # 自定义样式与脚本注入 (注入 KaTeX CSS、自定义样式，以及首页专属互动星空极光与流星动效)
 inject:
   head:
-    - <link rel="stylesheet" href="/css/custom.css?v=20261114-2">
+    - <link rel="stylesheet" href="/css/custom.css?v=20261114-3">
     - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css">
   bottom:
     - <script src="/js/hero-cosmos.js?v=20261114-2"></script>
