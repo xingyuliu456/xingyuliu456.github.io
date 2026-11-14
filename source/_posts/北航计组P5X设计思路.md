@@ -5,11 +5,12 @@ permalink: co-p5x-design
 categories:
 - 计算机组成
 tags:
-- cpu，异常处理
+- cpu
+- 异常处理
 cover: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqspQ21bs3Vw6cDT8SD2kMitIcxFb50LdVzDVe4-M0V_aNhXqLETS9jYTq&s=10
 description: 从 P4 到 P5X：单周期 MIPS CPU 异常处理改造全记录（避坑指南版）
 date: 2026-11-14 19:07:10
-updated: '2026-11-14 19:50:13'
+updated: '2026-11-14 20:16:18'
 ---
 
 # 从 P4 到 P5X：单周期 MIPS CPU 异常处理改造全记录（避坑指南版）
