@@ -2,43 +2,7 @@
    自定义全局样式优化 (Custom Styles)
    ======================================================== */
 
-/* 0. 自托管网页字体：英文 Cascadia Mono + 首页副标题艺术体 Cormorant Garamond */
-@font-face {
-  font-family: 'Cascadia Mono';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local('Cascadia Mono Regular'), local('Cascadia Mono'), url('/fonts/cascadia-mono-latin-400-normal.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2022, U+20AC, U+2122, U+2190-2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: 'Cascadia Mono';
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: local('Cascadia Mono Italic'), url('/fonts/cascadia-mono-latin-400-italic.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2022, U+20AC, U+2122, U+2190-2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: 'Cascadia Mono';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: local('Cascadia Mono SemiBold'), url('/fonts/cascadia-mono-latin-600-normal.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2022, U+20AC, U+2122, U+2190-2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: 'Cascadia Mono';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: local('Cascadia Mono Bold'), url('/fonts/cascadia-mono-latin-700-normal.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2022, U+20AC, U+2122, U+2190-2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
+/* 0. 首页打字机副标题艺术体 Cormorant Garamond（自托管） */
 @font-face {
   font-family: 'Cormorant Garamond';
   font-style: italic;
@@ -55,19 +19,6 @@
   font-display: swap;
   src: url('/fonts/cormorant-garamond-latin-600-italic.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+FEFF, U+FFFD;
-}
-
-button,
-input,
-optgroup,
-select,
-textarea {
-  font-family: inherit;
-}
-
-#article-container kbd,
-kbd {
-  font-family: 'Cascadia Mono', 'Microsoft YaHei', 'PingFang SC', monospace !important;
 }
 
 /* 1. 消除页脚蓝色突兀感，并确保浅色/深色模式下文字均清晰可见 */
@@ -579,7 +530,7 @@ kbd {
 #page-header.full_page #site-subtitle,
 #page-header.full_page #site-subtitle #subtitle,
 #page-header.full_page #site-subtitle .typed-cursor {
-  font-family: 'Cormorant Garamond', 'Cascadia Mono', 'Microsoft YaHei', serif !important;
+  font-family: 'Cormorant Garamond', Georgia, 'Microsoft YaHei', serif !important;
   font-style: italic;
   font-weight: 500;
   letter-spacing: 0.04em;

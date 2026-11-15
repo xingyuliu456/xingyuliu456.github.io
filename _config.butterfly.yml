@@ -58,12 +58,10 @@ code_blocks:
   shrink: false
   fullpage: false
 
-# 字体与排版（全站统一：英文 Cascadia Mono + 中文微软雅黑）
+# 字体与排版（恢复主题默认中英文字体，全局与代码字号统一为 15px）
 font:
   global_font_size: 15px
-  code_font_size: 14px
-  font_family: "'Cascadia Mono', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif"
-  code_font_family: "'Cascadia Mono', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', monospace"
+  code_font_size: 15px
 
 # 页面打字机副标题效果
 subtitle:
@@ -165,7 +163,7 @@ giscus:
 # 自定义样式与脚本注入 (注入 KaTeX CSS、自定义样式，以及首页专属互动星空极光与流星动效)
 inject:
   head:
-    - <link rel="stylesheet" href="/css/custom.css?v=20261115-1">
+    - <link rel="stylesheet" href="/css/custom.css?v=20261115-2">
     - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css">
   bottom:
     - <script src="/js/hero-cosmos.js?v=20261114-2"></script>
