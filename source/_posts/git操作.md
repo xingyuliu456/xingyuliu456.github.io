@@ -1,7 +1,7 @@
 ---
 title: git操作
 publish: true
-permalink: git-operation
+permalink: 2026/11/11/git-operation
 categories:
 - git
 tags:
@@ -10,7 +10,7 @@ tags:
 cover: https://images.unsplash.com/photo-1788104317221-e85195344eb2?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D
 description: 介绍了基本的git操作
 date: 2026-11-11 21:31:15
-updated: '2026-11-11 21:33:15'
+updated: '2026-11-18 20:51:51'
 ---
 
 ### Git 核心心智模型与常用命令速查

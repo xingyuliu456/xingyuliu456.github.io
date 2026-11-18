@@ -1,16 +1,16 @@
 ---
 title: 北航计组P5X设计思路
 publish: true
-permalink: co-p5x-design
+permalink: 2026/11/14/co-p5x-design
 categories:
 - 计算机组成
 tags:
 - cpu
 - 异常处理
-cover: https://img0.baidu.com/it/u=372692218,3976446337&fm=253&fmt=auto&app=120&f=JPEG?w=1198&h=800
+cover: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqspQ21bs3Vw6cDT8SD2kMitIcxFb50LdVzDVe4-M0V_aNhXqLETS9jYTq&s=10
 description: 从 P4 到 P5X：单周期 MIPS CPU 异常处理改造全记录（避坑指南版）
 date: 2026-11-14 19:07:10
-updated: '2026-11-14 20:16:18'
+updated: '2026-11-18 20:51:20'
 ---
 
 # 从 P4 到 P5X：单周期 MIPS CPU 异常处理改造全记录（避坑指南版）
