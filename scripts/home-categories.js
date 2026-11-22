@@ -1,81 +1,57 @@
 'use strict';
 
 /**
- * Category visual metadata table so each topic column has a tailored icon,
- * accent color, and concise subtitle on the homepage directory.
+ * 首页分类封面配置（分类名 -> 封面图片链接，一对一精确匹配）
+ * 每次新增分类时，直接在这里加一行 `'分类名': '图片链接',` 即可。
  */
-const CATEGORY_PRESETS = [
-  {
-    keywords: ['算法', '数据结构', 'leetcode'],
-    icon: 'fas fa-code-branch',
-    accent: '#3b82f6',
-    cover: 'https://images.unsplash.com/photo-1644175283511-f72f5cedc9de?auto=format&fit=crop&w=1200&h=675&q=80'
-  },
-  {
-    keywords: ['离散', '图论', '数学', '微积分', '线代', '概率'],
-    icon: 'fas fa-project-diagram',
-    accent: '#8b5cf6',
-    cover: 'https://images.unsplash.com/photo-1758263715725-3ebac833b5a2?auto=format&fit=crop&w=1200&h=675&q=80'
-  },
-  {
-    keywords: ['计算机组成', '计组', '体系结构', 'cpu', 'mips', '硬件'],
-    icon: 'fas fa-microchip',
-    accent: '#6366f1',
-    cover: 'https://images.unsplash.com/photo-1728042153273-8f9eefe78590?auto=format&fit=crop&w=1200&h=675&q=80'
-  },
-  {
-    keywords: ['物理', '力学', '波动', '电磁'],
-    icon: 'fas fa-atom',
-    accent: '#06b6d4',
-    cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1200&h=675&q=80'
-  },
-  {
-    keywords: ['git', 'linux', 'docker', 'shell', '工程', '工具'],
-    icon: 'fab fa-git-alt',
-    accent: '#f97316',
-    cover: 'https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&w=1200&h=675&q=80'
-  },
-  {
-    keywords: ['具身', '机器人', 'embodied', 'robot', 'ai', '深度', '模型'],
-    icon: 'fas fa-robot',
-    accent: '#10b981',
-    cover: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&h=675&q=80'
-  },
-  {
-    keywords: ['随笔', '杂谈', '日记', '生活'],
-    icon: 'fas fa-feather-alt',
-    accent: '#ec4899',
-    cover: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&h=675&q=80'
-  }
-];
-
-const FALLBACK_PALETTE = ['#3b82f6', '#6366f1', '#0ea5e9', '#14b8a6', '#f59e0b'];
-const FALLBACK_COVERS = [
-  'https://images.unsplash.com/photo-1763494679040-bb6671eb0067?auto=format&fit=crop&w=1200&h=675&q=80',
-  'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=1200&h=675&q=80',
-  'https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=1200&h=675&q=80'
-];
+const CATEGORY_COVERS = {
+  '算法与数据结构': 'https://images.unsplash.com/photo-1644175283511-f72f5cedc9de?auto=format&fit=crop&w=1200&h=675&q=80',
+  '离散数学2': 'https://img2.baidu.com/it/u=3085931495,3356206665&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+  '概率论': 'https://i1.hdslb.com/bfs/archive/4b0724f0966818d3eb9e55f1e90bf4eff6ca2acd.jpg',
+  '计算机组成': 'https://images.unsplash.com/photo-1728042153273-8f9eefe78590?auto=format&fit=crop&w=1200&h=675&q=80',
+  '基础物理学B': 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1200&h=675&q=80',
+  'git': 'https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&w=1200&h=675&q=80',
+  '随笔': 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&h=675&q=80'
+};
 
 /**
- * Resolve icon, accent color, and cover image for a category name uniformly.
+ * 未在 CATEGORY_COVERS 中配置时的统一兜底封面图
+ */
+const DEFAULT_CATEGORY_COVER = 'https://images.unsplash.com/photo-1763494679040-bb6671eb0067?auto=format&fit=crop&w=1200&h=675&q=80';
+
+/**
+ * 可选：分类图标与主题色（不配置时会使用 DEFAULT_CATEGORY_STYLE）
+ */
+const CATEGORY_STYLES = {
+  '算法与数据结构': { icon: 'fas fa-code-branch', accent: '#3b82f6' },
+  '离散数学2': { icon: 'fas fa-project-diagram', accent: '#8b5cf6' },
+  '概率论': { icon: 'fas fa-project-diagram', accent: '#8b5cf6' },
+  '计算机组成': { icon: 'fas fa-microchip', accent: '#6366f1' },
+  '基础物理学B': { icon: 'fas fa-atom', accent: '#06b6d4' },
+  'git': { icon: 'fab fa-git-alt', accent: '#f97316' },
+  '随笔': { icon: 'fas fa-feather-alt', accent: '#ec4899' }
+};
+
+const DEFAULT_CATEGORY_STYLE = {
+  icon: 'fas fa-layer-group',
+  accent: '#3b82f6'
+};
+
+/**
+ * Resolve icon, accent color, and cover image for a category name.
  * @param {string} name
  * @returns {{ icon: string, accent: string, cover: string }}
  */
 function resolveCategoryMeta(name) {
-  const lower = String(name || '').toLowerCase();
-  const matched = CATEGORY_PRESETS.find((preset) =>
-    preset.keywords.some((kw) => lower.includes(kw))
-  );
-  if (matched) return matched;
+  const key = String(name || '').trim();
+  const hasCover = Object.prototype.hasOwnProperty.call(CATEGORY_COVERS, key);
+  const hasStyle = Object.prototype.hasOwnProperty.call(CATEGORY_STYLES, key);
+  const style = hasStyle ? CATEGORY_STYLES[key] : DEFAULT_CATEGORY_STYLE;
 
-  let hash = 0;
-  for (let i = 0; i < lower.length; i++) {
-    hash = (hash * 31 + lower.charCodeAt(i)) >>> 0;
-  }
   return {
-    icon: 'fas fa-layer-group',
-    accent: FALLBACK_PALETTE[hash % FALLBACK_PALETTE.length],
-    cover: FALLBACK_COVERS[hash % FALLBACK_COVERS.length]
+    icon: style.icon,
+    accent: style.accent,
+    cover: hasCover ? CATEGORY_COVERS[key] : DEFAULT_CATEGORY_COVER
   };
 }
 
@@ -93,7 +69,7 @@ block content
           - const catPosts = cat.posts.sort('-date').toArray().slice(0, 2)
           .category-hub-card(style=\`--cat-accent: \${meta.accent}\`)
             a.category-hub-cover(href=url_for(cat.path) title=cat.name)
-              img.category-hub-cover-img(src=meta.cover alt=cat.name width="1200" height="675" loading="lazy")
+              img.category-hub-cover-img(src=meta.cover alt=cat.name width="1200" height="675" loading="lazy" referrerpolicy="no-referrer")
               span.category-hub-cover-scrim
               span.category-hub-count #{cat.length} 篇
               .category-hub-cover-overlay
