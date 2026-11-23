@@ -10,6 +10,6 @@ top_img: https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=forma
 
 欢迎来到我的个人博客！
 
-这里主要记录个人在技术探索、工程实践、具身智能（Embodied AI）及深度学习领域的学习沉淀与思考。
+这里主要记录个人在技术探索、工程实践、具身智能及深度学习领域的学习沉淀与思考。
 
 - **GitHub**: [xingyuliu456](https://github.com/xingyuliu456)

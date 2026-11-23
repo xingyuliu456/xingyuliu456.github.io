@@ -5,11 +5,11 @@
 # Site
 title: "Xingyu's Tech Space"
 subtitle: 'Stay hungry, stay foolish'
-description: '刘星宇的技术博客，专注具身智能 (Embodied AI)、机器人学、深度学习与算法、离散数学等领域的学习思考与工程实践。'
-keywords: '刘星宇,具身智能,Embodied AI,机器人,深度学习,算法与数据结构,离散数学,图论,Tech Blog'
-author: Xingyu Liu
-language: zh-CN
-timezone: 'Asia/Shanghai'
+description: '北航计算机，关注具身智能、机器人仿真、深度学习等领域的学习思考与工程实践。'
+keywords: '北航计算机,具身智能,Embodied AI,机器人,深度学习,Tech Blog'
+author: Liu Xingyu
+language: zh-TW
+timezone: 'Asia/Taipei'
 
 # URL
 ## GitHub Pages 部署路径配置：
